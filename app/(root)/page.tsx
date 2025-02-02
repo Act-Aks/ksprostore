@@ -6,9 +6,7 @@ const Home = async () => {
 
     return (
         <div>
-            {/* eslint-disable-next-line */}
-            {/* @ts-expect-error  */}
-            <ProductList data={latestProducts} title={'New Arrivals'} />
+            <ProductList products={latestProducts} title={'New Arrivals'} />
         </div>
     )
 }

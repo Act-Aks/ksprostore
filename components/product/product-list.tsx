@@ -14,7 +14,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, title }) => {
         <div className={'my-10'}>
             <h2 className='h2-bold mb-4'>{title}</h2>
             <RenderIf
-                condition={!!products?.length}
+                condition={!!products.length}
                 then={
                     <div
                         className={
