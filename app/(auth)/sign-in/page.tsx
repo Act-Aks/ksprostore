@@ -1,31 +1,51 @@
-'use client'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { auth } from '@/config/auth'
+import { APP_NAME } from '@/lib/constants'
+import routes from '@/lib/constants/routes'
+import { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import CredentialsSignInForm from './credentials-signin-form'
 
-import { Button } from '@/components/ui/button'
+export const metadata: Metadata = {
+    title: 'Sign In',
+}
 
-const SignIn = () => {
+interface SignInProps {
+    searchParams: Promise<{ callbackUrl: string }>
+}
+
+const SignIn = async (props: SignInProps) => {
+    const { callbackUrl } = await props.searchParams
+    const session = await auth()
+
+    if (session) {
+        return redirect(callbackUrl || routes.Home)
+    }
+
     return (
-        <div className={'flex h-screen w-full bg-black/10 p-20'}>
-            <div
-                key={'section-1'}
-                className={
-                    'flex flex-1 bg-violet-500 items-center justify-center hover:bg-violet-500/50'
-                }
-                onClick={() => {
-                    alert('Hi aks')
-                }}
-            >
-                <Button>Section 1</Button>
-            </div>
-            <div
-                className={
-                    'flex flex-1 bg-green-500 items-center justify-center hover:bg-green-500/50'
-                }
-                onClick={() => {
-                    alert('Hi aks')
-                }}
-            >
-                <Button>Section 2</Button>
-            </div>
+        <div className={'w-full max-w-md mx-auto shadow-2xl'}>
+            <Card>
+                <CardHeader className={'space-y-4'}>
+                    <Link href={routes.Home} className={'flex-center'}>
+                        <Image
+                            src={'/images/logo.svg'}
+                            alt={`${APP_NAME}-logo`}
+                            height={100}
+                            width={100}
+                            priority
+                        />
+                    </Link>
+                    <CardTitle className={'text-center'}>Sign In</CardTitle>
+                    <CardDescription className={'text-center'}>
+                        Sign in to your account to continue.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className={'space-y-4'}>
+                    <CredentialsSignInForm />
+                </CardContent>
+            </Card>
         </div>
     )
 }
