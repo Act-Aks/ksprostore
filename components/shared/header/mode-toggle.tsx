@@ -30,19 +30,12 @@ const ModeToggle = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button
-                    variant={'ghost'}
-                    className={'focus-visible:ring-0 focus-visible:ring-offset-0'}
-                >
+                <Button variant={'ghost'} className={'focus-visible:ring-0 focus-visible:ring-offset-0'}>
                     <RenderIf
                         condition={theme === 'system'}
                         then={<SunIcon />}
                         otherwise={
-                            <RenderIf
-                                condition={theme === 'dark'}
-                                then={<MoonIcon />}
-                                otherwise={<SunIcon />}
-                            />
+                            <RenderIf condition={theme === 'dark'} then={<MoonIcon />} otherwise={<SunIcon />} />
                         }
                     />
                 </Button>

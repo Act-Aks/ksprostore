@@ -29,18 +29,10 @@ const SignIn = async (props: SignInProps) => {
             <Card>
                 <CardHeader className={'space-y-4'}>
                     <Link href={routes.Home} className={'flex-center'}>
-                        <Image
-                            src={'/images/logo.svg'}
-                            alt={`${APP_NAME}-logo`}
-                            height={100}
-                            width={100}
-                            priority
-                        />
+                        <Image src={'/images/logo.svg'} alt={`${APP_NAME}-logo`} height={100} width={100} priority />
                     </Link>
                     <CardTitle className={'text-center'}>Sign In</CardTitle>
-                    <CardDescription className={'text-center'}>
-                        Sign in to your account to continue.
-                    </CardDescription>
+                    <CardDescription className={'text-center'}>Sign in to your account to continue.</CardDescription>
                 </CardHeader>
                 <CardContent className={'space-y-4'}>
                     <CredentialsSignInForm />

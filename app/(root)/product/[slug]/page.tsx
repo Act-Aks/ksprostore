@@ -1,18 +1,21 @@
 import RenderIf from '@/components/common/conditional-render'
+import AddCart from '@/components/product/add-cart'
 import ProductImages from '@/components/product/product-images'
 import ProductPrice from '@/components/product/product-price'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { getCart } from '@/lib/actions/cart.actions'
 import { getProductBySlug } from '@/lib/actions/product.actions'
+import { getCartItemFromProduct } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 
 const ProductDetails = async (props: { params: Promise<{ slug: string }> }) => {
     const { slug } = await props.params
 
     const product = await getProductBySlug(slug)
-
     if (!product) notFound()
+
+    const cart = await getCart()
 
     return (
         <section>
@@ -32,9 +35,7 @@ const ProductDetails = async (props: { params: Promise<{ slug: string }> }) => {
                         <div className='flex flex-col sm:flex-row sm:items-center gap-3'>
                             <ProductPrice
                                 price={Number(product.price)}
-                                className={
-                                    'w-24 rounded-full bg-green-100 text-green-700 px-5 py-2'
-                                }
+                                className={'w-24 rounded-full bg-green-100 text-green-700 px-5 py-2'}
                             />
                         </div>
                     </div>
@@ -64,7 +65,7 @@ const ProductDetails = async (props: { params: Promise<{ slug: string }> }) => {
                                 condition={product.stock > 0}
                                 then={
                                     <div className={'flex-center'}>
-                                        <Button className={'w-full'}>Add To Cart</Button>
+                                        <AddCart cart={cart} item={getCartItemFromProduct(product)} />
                                     </div>
                                 }
                             />

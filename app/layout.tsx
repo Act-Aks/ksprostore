@@ -1,4 +1,5 @@
 import '@/assets/styles/globals.css'
+import { Toaster } from '@/components/ui/toaster'
 import { APP_DESCRIPTION, APP_NAME, APP_URL } from '@/lib/constants'
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
@@ -26,13 +27,9 @@ export default function MainLayout({
     return (
         <html lang='en' suppressHydrationWarning>
             <body className={`${interFont.className} antialiased`}>
-                <ThemeProvider
-                    attribute={'class'}
-                    defaultTheme={'light'}
-                    enableSystem
-                    disableTransitionOnChange
-                >
+                <ThemeProvider attribute={'class'} defaultTheme={'light'} enableSystem disableTransitionOnChange>
                     {children}
+                    <Toaster />
                 </ThemeProvider>
             </body>
         </html>

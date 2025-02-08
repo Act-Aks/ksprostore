@@ -16,15 +16,8 @@ const ProductList: React.FC<ProductListProps> = ({ products, title }) => {
             <RenderIf
                 condition={!!products.length}
                 then={
-                    <div
-                        className={
-                            'grid grid-col-1 sm:grid-col-2 md:grid-cols-3 lg:grid-cols-4 gap-4'
-                        }
-                    >
-                        <ForEach
-                            of={products}
-                            render={product => <ProductCard product={product} />}
-                        />
+                    <div className={'grid grid-col-1 sm:grid-col-2 md:grid-cols-3 lg:grid-cols-4 gap-4'}>
+                        <ForEach of={products} render={product => <ProductCard product={product} />} />
                     </div>
                 }
                 otherwise={

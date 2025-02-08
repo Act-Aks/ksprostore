@@ -3,6 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { compareSync } from 'bcrypt-ts-edge'
 import NextAuth, { NextAuthConfig } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { NextResponse } from 'next/server'
 
 const authConfig = {
     pages: {
@@ -46,14 +47,55 @@ const authConfig = {
         }),
     ],
     callbacks: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         async session({ token, session, user, trigger }: any) {
             session.user.id = token.sub
+            session.user.role = token.role
+            session.user.name = token.name
 
             if (trigger === 'update') {
                 session.user.name = user.name
             }
 
             return session
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        async jwt({ token, user }: any) {
+            if (user) {
+                token.role = user.role
+
+                if (user.name === 'NO_NAME') {
+                    token.name = user.email.split('@')[0]
+
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { name: token.name },
+                    })
+                }
+            }
+            return token
+        },
+        authorized({ request }) {
+            /* Check for session cart cookie */
+            if (!request.cookies.get('sessionCartId')) {
+                /* Generate new id */
+                const sessionCartId = crypto.randomUUID()
+
+                const newReqHeaders = new Headers(request.headers)
+
+                const response = NextResponse.next({
+                    request: {
+                        headers: newReqHeaders,
+                    },
+                })
+
+                /* Set generated id as sessionCartId in cookies */
+                response.cookies.set('sessionCartId', sessionCartId)
+
+                return response
+            } else {
+                return true
+            }
         },
     },
 } satisfies NextAuthConfig

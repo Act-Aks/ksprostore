@@ -21,3 +21,11 @@ export const getProductBySlug = async (slug: string) => {
     })
     return convertToPlainObject(product)
 }
+
+/* Get product by slug */
+export const getProductById = async (id: string) => {
+    const product = await prisma.product.findFirst({
+        where: { id },
+    })
+    return convertToPlainObject(product)
+}
