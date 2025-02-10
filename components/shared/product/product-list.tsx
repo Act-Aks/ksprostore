@@ -1,6 +1,6 @@
+import RenderIf from '@/components/common/conditional-render'
+import ForEach from '@/components/common/for-each'
 import { Product } from '@/types'
-import RenderIf from '../common/conditional-render'
-import ForEach from '../common/for-each'
 import ProductCard from './product-card'
 
 interface ProductListProps {

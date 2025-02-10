@@ -1,5 +1,7 @@
 import { getCart } from '@/lib/actions/cart.actions'
+import routes from '@/lib/constants/routes'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import CartTable from './cart-table'
 
 export const metadata: Metadata = {
@@ -8,13 +10,16 @@ export const metadata: Metadata = {
 
 const Cart = async () => {
     const cart = await getCart()
-    if (!cart) return null
 
-    return (
-        <>
-            <CartTable cart={cart} />
-        </>
-    )
+    if (!cart || !cart.items.length) {
+        return (
+            <div>
+                Cart is empty. <Link href={routes.Home}> Continue Shopping</Link>
+            </div>
+        )
+    }
+
+    return <CartTable cart={cart} />
 }
 
 export default Cart

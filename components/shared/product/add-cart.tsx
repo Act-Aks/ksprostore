@@ -67,7 +67,7 @@ const AddCart: React.FC<AddCartProps> = ({ item, cart }) => {
             <Button type={'button'} variant={'outline'} disabled={isTransitioning} onClick={handleRemoveFromCart}>
                 <RenderIf
                     condition={isTransitioning}
-                    then={<Loader className={'w-4 h-4 animate-spin'} />}
+                    then={<Loader className={'loader'} />}
                     otherwise={<Minus className={'h-4 w-4'} />}
                 />
             </Button>
@@ -75,7 +75,7 @@ const AddCart: React.FC<AddCartProps> = ({ item, cart }) => {
             <Button type={'button'} variant={'outline'} disabled={isTransitioning} onClick={handleAddToCart}>
                 <RenderIf
                     condition={isTransitioning}
-                    then={<Loader className={'w-4 h-4 animate-spin'} />}
+                    then={<Loader className={'loader'} />}
                     otherwise={<Plus className={'h-4 w-4'} />}
                 />
             </Button>
@@ -84,7 +84,7 @@ const AddCart: React.FC<AddCartProps> = ({ item, cart }) => {
         <Button className={'w-full'} type={'button'} disabled={isTransitioning} onClick={handleAddToCart}>
             <RenderIf
                 condition={isTransitioning}
-                then={<Loader className={'w-4 h-4 animate-spin'} />}
+                then={<Loader className={'loader'} />}
                 otherwise={<Plus className={'h-4 w-4'} />}
             />{' '}
             Add To Cart

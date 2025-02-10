@@ -1,9 +1,9 @@
+import RenderIf from '@/components/common/conditional-render'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import routes from '@/lib/constants/routes'
 import { Product } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
-import RenderIf from '../common/conditional-render'
 import ProductPrice from './product-price'
 
 interface ProductCardProps {

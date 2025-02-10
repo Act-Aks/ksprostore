@@ -5,6 +5,7 @@ const routes = {
     Product: '/product',
     Cart: '/cart',
     ShippingAddress: '/shipping-address',
+    PaymentMethod: '/payment-method',
 }
 
 export default routes

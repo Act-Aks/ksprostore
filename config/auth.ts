@@ -3,6 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { compareSync } from 'bcrypt-ts-edge'
 import NextAuth, { NextAuthConfig } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 const authConfig = {
@@ -60,8 +61,9 @@ const authConfig = {
             return session
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        async jwt({ token, user }: any) {
+        async jwt({ token, user, trigger }: any) {
             if (user) {
+                token.id = user.id
                 token.role = user.role
 
                 if (user.name === 'NO_NAME') {
@@ -72,10 +74,47 @@ const authConfig = {
                         data: { name: token.name },
                     })
                 }
+
+                if (trigger === 'signIn' || trigger === 'signUp') {
+                    const cookiesObj = await cookies()
+                    const sessionCartId = cookiesObj.get('sessionCartId')?.value
+
+                    if (sessionCartId) {
+                        const sessionCart = await prisma.cart.findFirst({ where: { sessionCartId } })
+
+                        if (sessionCart) {
+                            await prisma.cart.deleteMany({ where: { userId: user.id } })
+
+                            await prisma.cart.update({
+                                where: { id: sessionCart.id },
+                                data: { userId: user.id },
+                            })
+                        }
+                    }
+                }
             }
             return token
         },
-        authorized({ request }) {
+        authorized({ request, auth }) {
+            /* Protect routes */
+            const protectedRoutes = [
+                /\/shipping-address/,
+                /\/payment-method/,
+                /\/place-order/,
+                /\/profile/,
+                /\/user\/(.*)/,
+                /\/order\/(.*)/,
+                /\/admin/,
+            ]
+
+            /* Get pathname */
+            const { pathname } = request.nextUrl
+
+            /* Check for auth */
+            if (!auth && protectedRoutes.some(route => route.test(pathname))) {
+                return false
+            }
+
             /* Check for session cart cookie */
             if (!request.cookies.get('sessionCartId')) {
                 /* Generate new id */

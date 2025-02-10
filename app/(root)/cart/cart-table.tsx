@@ -59,7 +59,7 @@ const CartTable: React.FC<CartTableProps> = ({ cart }) => {
         <>
             <h1 className={'py-4 h2-bold'}>Cart</h1>
             <RenderIf
-                condition={!cart || cart.items.length < 1}
+                condition={!cart || !cart.items.length}
                 then={
                     <div>
                         Cart is empty. <Link href={routes.Home}>Continue Shopping</Link>
@@ -104,7 +104,7 @@ const CartTable: React.FC<CartTableProps> = ({ cart }) => {
                                                     >
                                                         <RenderIf
                                                             condition={isTransitioning}
-                                                            then={<Loader className={'w-4 h-4 animate-spin'} />}
+                                                            then={<Loader className={'loader'} />}
                                                             otherwise={<Minus className={'w-4 h-4'} />}
                                                         />
                                                     </Button>
@@ -117,7 +117,7 @@ const CartTable: React.FC<CartTableProps> = ({ cart }) => {
                                                     >
                                                         <RenderIf
                                                             condition={isTransitioning}
-                                                            then={<Loader className={'w-4 h-4 animate-spin'} />}
+                                                            then={<Loader className={'loader'} />}
                                                             otherwise={<Plus className={'w-4 h-4'} />}
                                                         />
                                                     </Button>
@@ -138,7 +138,7 @@ const CartTable: React.FC<CartTableProps> = ({ cart }) => {
                                 <Button className={'w-full'} disabled={isTransitioning} onClick={handleShipping}>
                                     <RenderIf
                                         condition={isTransitioning}
-                                        then={<Loader className={'w-4 h-4 animate-spin'} />}
+                                        then={<Loader className={'loader'} />}
                                         otherwise={<ArrowRight className={'w-4 h-4'} />}
                                     />
                                     Proceed to Checkout

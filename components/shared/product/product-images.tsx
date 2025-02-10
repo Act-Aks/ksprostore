@@ -1,9 +1,9 @@
 'use client'
 
+import ForEach from '@/components/common/for-each'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { useState } from 'react'
-import ForEach from '../common/for-each'
 
 interface ProductImagesProps {
     images: string[]
