@@ -29,6 +29,14 @@
     .h3-bold {
         @apply font-bold text-xl lg:text-2xl;
     }
+
+    .loader {
+        @apply w-4 h-4 animate-spin;
+    }
+
+    .pgr {
+        @apply px-1 py-2 rounded-md bg-gradient-to-r from-primary/20 to-secondary/50 hover:bg-gradient-to-r hover:from-primary/60 hover:to-primary/30 hover:text-secondary transition-all duration-300;
+    }
 }
 
 @layer base {
@@ -99,8 +107,5 @@
     }
     body {
         @apply bg-background text-foreground;
-    }
-    .loader {
-        @apply w-4 h-4 animate-spin;
     }
 }

@@ -2,11 +2,11 @@
 
 import { auth, signIn, signOut } from '@/config/auth'
 import { prisma } from '@/db/prisma'
-import { ShippingAddress } from '@/types'
+import { PaymentMethod, ShippingAddress } from '@/types'
 import { hashSync } from 'bcrypt-ts-edge'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { formatError } from '../utils'
-import { shippingAddressSchema, signInFormSchema, signUpFormSchema } from '../validators'
+import { paymentMethodSchema, shippingAddressSchema, signInFormSchema, signUpFormSchema } from '../validators'
 
 export const signInWithCredentials = async (state: unknown, formData: FormData) => {
     try {
@@ -103,6 +103,33 @@ export const updateUserAddress = async (data: ShippingAddress) => {
         return {
             success: true,
             message: 'Address updated successfully',
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: formatError(error),
+        }
+    }
+}
+
+export const updateUserPaymentMethod = async (data: PaymentMethod) => {
+    try {
+        const seesion = await auth()
+        const currentUser = await prisma.user.findFirst({ where: { id: seesion?.user?.id } })
+        if (!currentUser) {
+            throw new Error('User not found')
+        }
+
+        const paymentMethod = paymentMethodSchema.parse(data)
+
+        await prisma.user.update({
+            where: { id: currentUser.id },
+            data: { paymentMethod: paymentMethod.type },
+        })
+
+        return {
+            success: true,
+            message: "User's payment method updated successfully",
         }
     } catch (error) {
         return {

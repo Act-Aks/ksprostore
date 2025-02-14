@@ -49,6 +49,16 @@ const User = async () => {
                             <div className='text-sm text-muted-foreground leading-none'>{session.user?.email}</div>
                         </div>
                     </DropdownMenuLabel>
+                    <DropdownMenuItem>
+                        <Link href={routes.Profile} className={'w-full'}>
+                            User Profile
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <Link href={routes.Orders} className={'w-full'}>
+                            Order History
+                        </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem className={'p-0 mb-1'}>
                         <form action={signOutUser} className={'w-full'}>
                             <Button className={'w-full py-4 px-2 h-4 justify-center'} variant={'ghost'}>
