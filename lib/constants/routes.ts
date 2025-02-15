@@ -12,4 +12,11 @@ const routes = {
     Orders: '/user/orders',
 }
 
+export const adminRoutes = {
+    Overview: '/admin/overview',
+    Products: '/admin/products',
+    Orders: '/admin/orders',
+    Users: '/admin/users',
+}
+
 export default routes

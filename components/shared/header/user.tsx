@@ -1,3 +1,4 @@
+import RenderIf from '@/components/common/conditional-render'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -8,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { auth } from '@/config/auth'
 import { signOutUser } from '@/lib/actions/user.actions'
-import routes from '@/lib/constants/routes'
+import routes, { adminRoutes } from '@/lib/constants/routes'
 import { UserIcon } from 'lucide-react'
 import Link from 'next/link'
 
@@ -59,6 +60,17 @@ const User = async () => {
                             Order History
                         </Link>
                     </DropdownMenuItem>
+
+                    <RenderIf
+                        condition={session?.user?.role === 'admin'}
+                        then={
+                            <DropdownMenuItem>
+                                <Link href={adminRoutes.Overview} className={'w-full'}>
+                                    Admin
+                                </Link>
+                            </DropdownMenuItem>
+                        }
+                    />
                     <DropdownMenuItem className={'p-0 mb-1'}>
                         <form action={signOutUser} className={'w-full'}>
                             <Button className={'w-full py-4 px-2 h-4 justify-center'} variant={'ghost'}>

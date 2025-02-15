@@ -3,6 +3,7 @@
 import { auth } from '@/config/auth'
 import { prisma } from '@/db/prisma'
 import { PaymentResult } from '@/types'
+import { Prisma } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { PAGE_SIZE } from '../constants'
@@ -12,6 +13,11 @@ import { convertToPlainObject, formatError } from '../utils'
 import { createOrderSchema } from '../validators'
 import { getCart } from './cart.actions'
 import { getUserById } from './user.actions'
+
+type SalesData = {
+    month: string
+    totalSales: number
+}[]
 
 export const createOrder = async () => {
     try {
@@ -224,5 +230,39 @@ export const getOrders = async ({ limit = PAGE_SIZE, page }: { limit?: number; p
     return {
         data: orders,
         totalPages: Math.ceil(ordersCount / limit),
+    }
+}
+
+export const getOrderSummary = async () => {
+    const ordersCount = await prisma.order.count()
+    const productsCount = await prisma.product.count()
+    const usersCount = await prisma.user.count()
+
+    const totalSales = await prisma.order.aggregate({ _sum: { totalPrice: true } })
+
+    const salesDataRaw = await prisma.$queryRaw<
+        Array<{ month: string; totalSales: Prisma.Decimal }>
+    >`SELECT to_char("createdAt", 'MM/YY') as "month", sum("totalPrice") as "totalSales" FROM "Order" GROUP BY to_char("createdAt", 'MM/YY')`
+
+    const salesData: SalesData = salesDataRaw.map(item => ({
+        month: item.month,
+        totalSales: Number(item.totalSales),
+    }))
+
+    const latestSales = await prisma.order.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: {
+            user: { select: { name: true } },
+        },
+        take: 6,
+    })
+
+    return {
+        ordersCount,
+        productsCount,
+        usersCount,
+        latestSales,
+        totalSales,
+        salesData,
     }
 }

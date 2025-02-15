@@ -61,7 +61,7 @@ const authConfig = {
             return session
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        async jwt({ token, user, trigger }: any) {
+        async jwt({ token, user, trigger, session }: any) {
             if (user) {
                 token.id = user.id
                 token.role = user.role
@@ -93,6 +93,11 @@ const authConfig = {
                     }
                 }
             }
+
+            if (session?.user?.name && trigger === 'update') {
+                token.name = session.user.name
+            }
+
             return token
         },
         authorized({ request, auth }) {

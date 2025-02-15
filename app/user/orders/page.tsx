@@ -1,5 +1,6 @@
 import RenderIf from '@/components/common/conditional-render'
 import ForEach from '@/components/common/for-each'
+import Pagination from '@/components/pagination'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getOrders } from '@/lib/actions/order.actions'
 import routes from '@/lib/constants/routes'
@@ -68,6 +69,10 @@ const Orders = async ({ searchParams }: OrdersProps) => {
                         />
                     </TableBody>
                 </Table>
+                <RenderIf
+                    condition={orders.totalPages > 1}
+                    then={<Pagination total={orders.totalPages} page={Number(page) || 1} />}
+                />
             </div>
         </div>
     )

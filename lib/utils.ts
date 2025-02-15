@@ -1,5 +1,6 @@
 import { CartItem, Product } from '@/types'
 import { clsx, type ClassValue } from 'clsx'
+import qs from 'query-string'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -79,6 +80,12 @@ export function formatCurrency(amount: number | string | null) {
     return 'NaN'
 }
 
+const numberFormatter = new Intl.NumberFormat('en-US')
+
+export function formatNumber(value: number) {
+    return numberFormatter.format(value)
+}
+
 export function formatId(id: string) {
     return `...${id.substring(id.length - 6)}`
 }
@@ -115,18 +122,18 @@ export const formatDateTime = (dateString: Date) => {
 }
 
 // Form the pagination links
-// export function formUrlQuery({ params, key, value }: { params: string; key: string; value: string | null }) {
-//     const query = qs.parse(params)
+export function formUrlQuery({ params, key, value }: { params: string; key: string; value: string | null }) {
+    const query = qs.parse(params)
 
-//     query[key] = value
+    query[key] = value
 
-//     return qs.stringifyUrl(
-//         {
-//             url: window.location.pathname,
-//             query,
-//         },
-//         {
-//             skipNull: true,
-//         },
-//     )
-// }
+    return qs.stringifyUrl(
+        {
+            url: window.location.pathname,
+            query,
+        },
+        {
+            skipNull: true,
+        },
+    )
+}

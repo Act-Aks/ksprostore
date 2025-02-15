@@ -2,7 +2,7 @@
 
 import { auth, signIn, signOut } from '@/config/auth'
 import { prisma } from '@/db/prisma'
-import { PaymentMethod, ShippingAddress } from '@/types'
+import { PaymentMethod, ShippingAddress, UpadateProfile } from '@/types'
 import { hashSync } from 'bcrypt-ts-edge'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { formatError } from '../utils'
@@ -130,6 +130,31 @@ export const updateUserPaymentMethod = async (data: PaymentMethod) => {
         return {
             success: true,
             message: "User's payment method updated successfully",
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: formatError(error),
+        }
+    }
+}
+
+export const updateProfile = async (data: UpadateProfile) => {
+    try {
+        const session = await auth()
+        const userId = session?.user?.id
+        if (!userId) {
+            throw new Error('User not found')
+        }
+
+        await prisma.user.update({
+            where: { id: userId },
+            data: { name: data.name },
+        })
+
+        return {
+            success: true,
+            message: 'Profile updated successfully',
         }
     } catch (error) {
         return {

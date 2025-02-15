@@ -7,6 +7,7 @@ import {
     paymentMethodSchema,
     paymentResultSchema,
     shippingAddressSchema,
+    updateProfileSchema,
 } from '@/lib/validators'
 import { TypeOf } from 'zod'
 
@@ -32,3 +33,4 @@ export type Order = TypeOf<typeof createOrderSchema> & {
     user: { name: string; email: string }
 }
 export type PaymentResult = TypeOf<typeof paymentResultSchema>
+export type UpadateProfile = TypeOf<typeof updateProfileSchema>
