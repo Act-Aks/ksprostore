@@ -2,7 +2,6 @@ import RenderIf from '@/components/common/conditional-render'
 import ForEach from '@/components/common/for-each'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { auth } from '@/config/auth'
 import { getOrderSummary } from '@/lib/actions/order.actions'
 import routes from '@/lib/constants/routes'
 import { formatCurrency, formatDateTime, formatNumber } from '@/lib/utils'
@@ -16,12 +15,6 @@ export const metadata: Metadata = {
 }
 
 const AdminOverview = async () => {
-    const session = await auth()
-
-    if (session?.user.role !== 'admin') {
-        throw new Error('Unauthorized')
-    }
-
     const summary = await getOrderSummary()
 
     return (

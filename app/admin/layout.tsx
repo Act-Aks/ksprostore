@@ -6,16 +6,19 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import MainNav from './main-nav'
+import { requireAdmin } from '@/lib/guards/auth.guard'
 
 export const metadata: Metadata = {
     title: 'Admin',
 }
 
-export default function AdminLayout({
+export default async function AdminLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
+    await requireAdmin()
+
     return (
         <div className={'flex flex-col'}>
             <div className={'border-b container mx-auto'}>

@@ -10,6 +10,7 @@ const routes = {
     PlaceOrder: '/place-order',
     Profile: '/user/profile',
     Orders: '/user/orders',
+    Unauthorized: '/unauthorized',
 }
 
 export const adminRoutes = {
