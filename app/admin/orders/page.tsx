@@ -68,6 +68,11 @@ const AdminOrders: React.FC<AdminOrdersProps> = async ({ searchParams }) => {
                                                 Details
                                             </Link>
                                         </Button>
+                                        <Button asChild variant={'outline'} size={'sm'}>
+                                            <Link href={`${routes.Order}/${order.id}`} className={'pgr'}>
+                                                Delete
+                                            </Link>
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             )}

@@ -6,13 +6,13 @@ import { PaymentResult } from '@/types'
 import { Prisma } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
-import { PAGE_SIZE } from '../constants'
-import routes from '../constants/routes'
-import { paypal } from '../paypal'
-import { convertToPlainObject, formatError } from '../utils'
-import { createOrderSchema } from '../validators'
-import { getCart } from './cart.actions'
-import { getUserById } from './user.actions'
+import { PAGE_SIZE } from '@/lib/constants'
+import routes, { adminRoutes } from '@/lib/constants/routes'
+import { paypal } from '@/lib/paypal'
+import { convertToPlainObject, formatError } from '@/lib/utils'
+import { createOrderSchema } from '@/lib/validators'
+import { getCart } from '@/lib/actions/cart.actions'
+import { getUserById } from '@/lib/actions/user.actions'
 
 type SalesData = {
     month: string
@@ -282,5 +282,21 @@ export const getAllOrders = async ({ limit = PAGE_SIZE, page }: { limit?: number
     return {
         data,
         totalPages: Math.ceil(dataCount / limit),
+    }
+}
+
+export const deleteOrder = async (id: string) => {
+    try {
+        await prisma.order.delete({ where: { id } })
+        revalidatePath(adminRoutes.Orders)
+        return {
+            success: true,
+            message: 'Order deleted successfully',
+        }
+    } catch (error) {
+        return {
+            error: formatError(error),
+            success: false,
+        }
     }
 }
